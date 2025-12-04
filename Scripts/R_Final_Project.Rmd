@@ -509,4 +509,6 @@ We also analyzed the biomass of these species in each locality (Fig. 6).
 
 ### Conclusions
 
+# AI Disclosure
+
 # REFERENCES
