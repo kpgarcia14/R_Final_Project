@@ -445,6 +445,12 @@ When considering common species (q= 1), the numbers even a little more, but foll
 
 ### Conclusions
 
+Among all the localities, SFFC shows a higher diversity, abundance and richness, followed by SC by far. This is very interesting given that SFFC is one of the few locations of TDF in Colombia that is under protection, and the study area is currently undergoing a recovery treatment (Parques Nacionales Naturales de Colombia, 2024). Cerambycidae species are known to be good indicators of their ecosystem health, because their diversity is affected under habitat stress that decreases their feeding and reproduction resources (Hjältén *et al*., 2012).
+
+Therefore, having a higher diversity associated with a protected area is showing that the actions performed to recover and protect the forests are giving good results, because the high diversity of Cerambycidae species suggest a healthy ecosystem. 
+
+We aim that this results demonstrate to decision makers the importance of making efforts in other TDF fragments as their diversity is clearly under threat, specially in localities like LR, RLF and RM. 
+
 ## Cerambycidae diversity in two habitats within TDF fragment, forest and buffer zone.
 
 ### Results
@@ -564,8 +570,21 @@ print(figure_7a)
 print(figure_7b)
 ```
 
-
 ### Conclusions
+
+We made further analyses in the most diverse locality we sampled, the SFFC. The TDF in SFFC is currently under threat, so as a conservation measure, local authorities had started a recovery area with a buffer zone adjacent to the forest fragment. As Cerambycidae species are known to be conservation indicators (Hjältén *et al*. 2012), we compared the abundance, richness and biomass between forest and buffer habitats. 
+
+As expected, the community is characterized for a high number of rare species, this is consistent with the findings of García *et al*. (2021) which found a high number of singletones and doubletones in two fragments of TDF in the Caribbean of Colombia. Also, according to Cava *et al*. (2015) this is a common find in Neotropical Arthropods. 
+
+When evaluating the abundance and richness of the Cerambycidae community, the buffer zone showed to have higher values than the forest. This results suggest that the buffer zone is acting like a ecological border between the forest and the urban area, comprising characteristics from both types of habitat, and its own, providing more resources to a higher quantity of species and individuals (Smith & Smith, 2007). This result is consistent with the findings of Alvaréz-Ramon *et al*. (2022), which report a higher number of Cerambycidae associated to a border area. 
+
+However, the number of species and individuals alone is not enough to truly understand the dynamic undergoing the Cerambycidae community, that is why we decided to also study their biomass. The biomass provides insights about the contribution of each habitat in terms of energy flux (Saint-Germain *et al*., 2007).
+
+This higher biomass of the forest is probably related with the outliers shown in the biomass boxplot, which we conclude is a result of the high abundance of a select number of species, including *Ceragenia insulana* and *Dorcasta dasycera*. This shows that the forest still hosts the optimal resources for some species to reach their high peak of abundance, probably due to the presence of layered vegetation (Knuff *et al*., 2020). This highlights the importance to protect and recover the forest.  
+
+Lastly, given the differences in the natural history between the subfamilies of Cerambycidae, we analyzed their abundance in each habitat. We found Lamiinae to be more abundant in the buffer zone, suggesting a generalist behavior, able to adapt to all types of resources, and not depend on only the ones offered in the forest. Further studies on the habitat specialization of the species that compose Lamiinae subfamily are highly recommended to confirm this hypothesis. 
+
+The results of this study highlights the importance of establishing buffer zones as a part of the recovery of a forest in restoration because it provides an optimal habitat for the species to transition to the primary forest. We expect that with this results people will see the importance of recovering our threat ecosystems and monitoring the biodiversity of groups like Cerambycidae to evaluate the ecosystem health.  
 
 # AI DISCLOSURE
 
