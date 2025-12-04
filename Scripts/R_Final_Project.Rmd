@@ -505,7 +505,65 @@ print(figure_5)
 
 ```
 
-We also analyzed the biomass of these species in each locality (Fig. 6).
+We also analyzed the biomass of these species in each locality (Fig. 6). The biomass in opposite than the abundance is greater in the forest than in the buffer zone, although is fairly close (Table 1). However, when analyzing the distribution of the biomass, the forest presents outliers, which increase the total biomass, and the buffer zone presents a more even distribution of this measure (Fig. 6). 
+
+```{r, echo=FALSE, fig.width=5, fig.height=3, warning=FALSE, message= F}
+
+figure_6 <- ggplot(Master_matrix_ordered, aes(x = Locality, y = biomass, fill = Locality)) +
+  geom_boxplot(show.legend = FALSE, width= 0.5)+
+  scale_y_log10()+
+  scale_x_discrete(labels= c("SFFC_buffer_zone"= "Buffer zone", "SFFC_forest" = "Forest"))+
+  theme_classic()+
+  labs(y= "Biomass(log10)", caption= "Figure 6. Biomass of Cerambycidae species in two habitats (forest\nand buffer zone) in a fragment of TDF (SFFC)")+
+  theme(axis.text= element_text(size= 10),
+        axis.title= element_text(size= 10),
+        legend.title= element_text(size= 10),
+        legend.text= element_text(size=10),
+    plot.caption= element_text(size=10, hjust= 0.05))+
+    scale_fill_viridis_d(option= "turbo", name= "Locality")
+
+print(figure_6)
+
+```
+
+The relation between biomass and the other variables (abundance and richness) was addressed by calculating their ratio (Table 1), and both proportions were higher in the buffer zone than in the forest habitat consistent with previous results. 
+
+Lastly, we were interested in evaluating if the abundance of the subfamilies was variable between habitats, and surprisingly, we found that in the buffer zone the most abundant subfamily is Lamiinae, while in forest it is Cerambycinae (Fig. 7). 
+
+```{r, echo=FALSE, fig.width=5, fig.height=3, warning=FALSE, message= F}
+
+figure_7 <- Variables_nested %>%
+  mutate(plot= map(taxa_details, ~ggplot(.x, aes(Subfamily, n, fill= Subfamily)) +
+                     geom_col(show.legend = FALSE)+
+  theme_classic()+
+    theme(axis.text= element_text(size= 10),
+        axis.title= element_text(size= 10),
+        legend.title= element_text(size= 10),
+        legend.text= element_text(size=10),
+    plot.caption= element_text(size=10, hjust= 0.3))+
+    scale_fill_viridis_d(option= "turbo")+
+    labs(y= "Number of individuals")))%>%
+  pull(plot)
+
+names(figure_7) <- Variables_nested$Locality
+
+
+
+figure_7a <- figure_7[["SFFC buffer zone"]]
+
+figure_7a <- figure_7a +
+  ggtitle("Buffer zone")
+
+figure_7b <- figure_7[["SFFC forest"]]
+
+figure_7b <- figure_7b +
+  labs(caption= "Figure 7. Abundance of Cerambycidae species by subfamily in two\nhabitats (forest and buffer zone) in a fragment of TDF (SFFC)") +
+  ggtitle("Forest")
+
+print(figure_7a)
+print(figure_7b)
+```
+
 
 ### Conclusions
 
