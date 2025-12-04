@@ -1,0 +1,512 @@
+---
+title: "FANR 8950, Fall 2025 - Final Project"
+author: "Kimberly Garcia"
+date: "2025-12-04"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+  word_document: 
+    toc: true
+  pdf_document:
+    toc: true
+---
+```{r setup, include=FALSE, warning=FALSE, message= F}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# INTRODUCTION
+
+# DATA EXPLORATION
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+library(tidyverse)
+library(here)
+
+#Read in datasets to be used
+
+general_matrix <- read.csv2("C:/Kimii/Doctorado/PhD/UGA/Classes/R/FANR_8925_Fall2025_Final_Project/data/raw/Final_project.csv", header = TRUE, stringsAsFactors = F) #Read csv, using csv2 because the data is separated by ;
+
+SFFC_biomass <- read.csv2("C:/Kimii/Doctorado/PhD/UGA/Classes/R/FANR_8925_Fall2025_Final_Project/data/raw/Biomass.csv", header = TRUE, stringsAsFactors = FALSE) #biomass data from SFFC
+
+SFFC_subfamilies <-  read.csv2("C:/Kimii/Doctorado/PhD/UGA/Classes/R/FANR_8925_Fall2025_Final_Project/data/raw/Subfamilies.csv", header = TRUE, stringsAsFactors = FALSE) #subfamily in SFFC
+
+
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+library(dplyr)
+
+#Subset to samples of SFFC only
+
+SFFC_matrix <- subset(general_matrix, startsWith(X, "SFFC"))#subset to SFFC rows
+
+SFFC_matrix <- dplyr::select(SFFC_matrix, where(~ any(!is.na(.)))) #Maintains only columns with data.
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+#DATA CLEANING
+
+#Clean and unify species names across datasets
+
+SFFC_subfamilies <- SFFC_subfamilies %>%
+  mutate(Species = str_replace_all(Species, " $", "")) %>% #Replace spaces after the name
+  mutate(Species = str_replace_all(Species, " ", "_")) %>% #Replace " " by "_"
+  mutate(Species= str_replace(Species,"\\.", "")) #Delete "."
+
+SFFC_biomass <- SFFC_biomass %>%
+  rename(Species = Taxa) %>% #unify column name
+  mutate(Species = str_replace_all(Species, " $", "")) %>% 
+  mutate(Species = str_replace_all(Species, " ", "_")) %>%
+  mutate(Species= str_replace(Species,"\\.", "")) %>%
+  mutate(Species= str_replace(Species,"\\(\\?\\)", "")) %>% #Delete (?) at the end of the names
+mutate(Species = str_remove(Species, "_$")) 
+
+SFFC_matrix <- SFFC_matrix %>% #this will be long...
+  rename(
+    Ceragenia_insulana = C..insulana,
+    Mallodon_dasystomus = M..dasystomus,
+    Parastizocera_procera = P..procera,
+    Limernaea_ochracea = L..ochracea,
+    Lagocheirus_araneiformis = L..araneiformis,
+    Neocompsa_glaphyra = N..glaphyra,
+    Aphies_erythrodera = A..erythrodera,
+    Myoxinus_pictus = M..pictus,
+    Diploschema_mandibulare = D..mandibulare,
+    Chlorida_festiva= C..festiva,
+    Steirastoma_histrionica = S..histrionica,
+    Lissonotus_coranillus = L..corallinus,
+    Steinheilia_mandibularis = S..mandibularis,
+    Zeale_scalaris = Z..scalaris,
+    Ancylosternus_morio_albicornis = A..morio,
+    Oxymerus_aculeatus_lebasi = O..aculeatus,
+    Trachyderes_melas= T..melas,
+    Malacopterus_tenellus= M..tenellus,
+    Poeciloxestia_paraensis= P..paraensis,
+    Coleoxestia_atrata= C..atrata,
+    Dorcasta_dasycera= D.dasycera,
+    Nealcidion_socium= N.socium,
+    Desmiphora_canescens= D.canescens,
+    Caciomorpha_palliata= C.palliata,
+    Atrypanius_lignarius= A..lignarius,
+    Oedopeza_ocellator= O.ocellator,
+    Gnomidolon_bellus= G..bellus....,
+    Ptychodes_taeniotoides_taeniotoides= P..taeniotoides,
+    Neoptychodes_trilineatus= N..trilineatus,
+    Taurolema_flavocincta= T..flavocincta,
+    Phaea_sondenegro= P..sondenegro,
+    Oreodera_howdeni=O..howdeni,
+    Tulcus_tigrinatus= T..tigrinatus,
+    Tulcus_picticornis= T..picticornis,
+    Oedopeza_cryptica= O..cryptica,
+    Chrysoprasis_chevrolati= C..chevrolati,
+    Eburodacrys_asperula= E..asperula,
+    Pantomallus_martinezi= P..martinezi,
+    Beraba_limpida= B..limpida,
+    Beraba_sp= Beraba.sp.,
+    Gnomibidion_cylindricum= G..cylindricum,
+    Tropidion_sp= Tropidion.sp1,
+    Psyrassa_xestioides= P..xestioides,
+    Lepturges_circumscripta= L..circunscripta,
+    Lepturges_sp1= Lepturges.sp1.,
+    Lepturges_sp2= Lepturges.sp1..2,
+    Lepturges_sp3= Lepturges.sp1..3,
+    Gorybia_armata= G..armata,
+    Gorybia_martes= G..martes,
+    Irundisaua_moacyri= Irundisaua.moacyri,
+    Adetus_tayronus= Adetus.tayronus,
+    Estola_vulgaris= Estola.vulgaris,
+    Eupogonius_subaeneus= Eupogonius.subaeneus,
+    Tapeina_erectifrons_erectifrons = T..erectifrons,
+    Harringtonia_dalmeidai = H..dalmeidai,
+    Carphina_arcifera= C..arcifera....,
+    Estola_flavomarmorata= Estola.flavomarmorata,
+    Heterachthes_sp= Heterachthes.sp.,
+    Heterachthes_lateralis= H..lateralis,
+    Leptostylus_carinatus= L..carinatus,
+    Hipposis_sp= Hippopsis.sp..1.1,
+    Hippopsis_lemniscata= H..lemniscata,
+    Hippopsis_albicans= H..albicans....,
+    Lophopoeum_carinatulum= L..carinatulum
+)
+
+#Combine two columns of the same species that were separated by typo
+
+SFFC_matrix <- SFFC_matrix %>%
+  mutate(Lepturges_sp1 = coalesce(Lepturges_sp1, Lepturges.sp1..1)) %>%
+  select(-Lepturges.sp1..1)
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+#Unify Species column across all datasets.
+
+SFFC_matrix_longer <- SFFC_matrix %>%
+  pivot_longer(cols= -X, names_to= "Species", values_to= "Abundance")
+
+SFFC_matrix_longer <- rename(SFFC_matrix_longer, Locality = X)
+
+#Rename columns in english
+
+SFFC_biomass <- SFFC_biomass %>%
+rename(SFFC_forest= BOS, SFFC_buffer_zone= AMORT)
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+#Summarize SFFC matrix by type of locality (forest or buffer)
+
+SFFC_matrix_locality <- SFFC_matrix_longer %>%
+  mutate(Locality= case_when(
+    str_starts(Locality, "SFFC AMORT") ~ "SFFC_buffer_zone",
+    str_starts(Locality, "SFFC") ~ "SFFC_forest"
+  )) %>%
+  group_by(Locality, Species) %>%
+  summarize(n= sum(Abundance, na.rm= T), .groups= "drop")
+  
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+#Create master matrix with all datasets
+
+Master_matrix <- SFFC_matrix_locality %>%
+  left_join(SFFC_subfamilies, SFFC_matrix_locality, by= "Species") #Join subfamilies with other info
+
+SFFC_biomass <- SFFC_biomass %>%
+  pivot_longer(cols = c(SFFC_buffer_zone, SFFC_forest), names_to = "Locality", values_to = "biomass") #Create a new column in subfamilies so it matches the original format before joining
+
+Master_matrix <- Master_matrix %>%
+  left_join(SFFC_biomass, Master_matrix, by= c("Species", "Locality")) #Join biomass data
+
+Master_matrix <- Master_matrix %>%
+    filter(biomass != 0, !is.na(biomass)) #Mantain only sp that has biomass data
+  
+Master_matrix$biomass <- as.numeric(Master_matrix$biomass) #change biomass to numeric
+
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+#Create factor for species name and organize by their abundance
+
+Master_matrix_ordered <- Master_matrix %>%
+  mutate(Species = str_replace_all(Species, "_", " "),
+         Locality = str_replace_all(Locality, "_", " "),
+    Species = as.factor(Species),
+         Species = fct_reorder(Species, n, max))
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+#Create function to identify singletones and doubletones
+## For singletones
+
+singletones <- function(vect){
+  single <- filter(vect, n==1) #Get unique values in the vector
+  single_counts <- nrow(single) #Count the number of occurrence of each value
+  return(single_counts)
+}
+
+
+
+##For doubletones
+
+doubletones <- function(vect){
+  double <- filter(vect, n==2) #Get unique values in the vector
+  double_counts <- nrow(double) #Count the number of occurrence of each value
+  return(double_counts)
+}
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+#Create variable matrix for the table
+
+Variables <- Master_matrix_ordered %>%
+  group_by(Locality) %>%
+  summarize(Richness = n(),
+            Abundance= sum(n),
+            Biomass= sum(biomass),
+            Mean_biomass= mean(biomass),
+            SD_biomass= sd(biomass))
+
+Variables <- Variables %>%
+  mutate(ABC= Abundance/Biomass, #abundance/biomass comparison metric
+         sp_bm_ratio= Richness/Biomass)  #richness/biomass ratio
+
+ 
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+#If statement for counts how many species has abundance above and below the mean 
+
+mean <- mean(Master_matrix$n)
+
+n <- Master_matrix$n
+
+above <- 0
+below <- 0
+
+for(x in n) {
+if(x > mean) {
+  above <- above + 1
+} else {
+  below <- below + 1 
+}}
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+#Nested data frame by habitat of SFFC
+
+##Nest data by locality
+
+Variables_nested <- nest(Master_matrix_ordered, taxa_details= -Locality) 
+
+#Join both data frames
+
+Variables_nested <- left_join(Variables_nested, Variables, by= "Locality")
+
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+#Loop for calculating hill numbers by locality (all)
+
+#install.packages("hillR")
+library(hillR)
+
+#Modify the original matrix to have a row per locality because the package demands this format
+
+Hill_localities <- general_matrix %>%
+  mutate(
+    Locality= case_when(startsWith(X, "SFFC") ~ "SFFC",
+                        startsWith(X, "RM") ~ "RM",
+                        startsWith(X, "RLF") ~ "RLF",
+                        startsWith(X, "LR") ~ "LR",
+                        startsWith(X, "SC") ~ "SC"
+                        )
+  ) %>%
+  group_by(Locality) %>%
+  summarise(across(where(is.numeric), sum, na.rm= T))
+
+Hill_analysis <- Hill_localities[, -1]   
+rownames(Hill_analysis) <- Hill_localities$Locality
+
+#For loop for calculating hill numbers on each locality
+
+for(x in Hill_analysis) {
+  Hill_0 <- hill_taxa(Hill_analysis, q=0)
+  Hill_1 <- hill_taxa(Hill_analysis, q=1)
+  Hill_2 <- hill_taxa(Hill_analysis, q=2)
+}
+
+
+Hill_numbers <- data.frame(
+  Locality= names(Hill_0),
+  Hill_0= as.numeric(Hill_0),
+  Hill_1= as.numeric(Hill_1),
+  Hill_2= as.numeric(Hill_2)
+)
+```
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+#Create variable data frame for all the localities
+
+general_matrix_longer <- Hill_localities %>%
+  pivot_longer(cols= -Locality, names_to= "Species", values_to= "Abundance") %>%
+  filter(Abundance > 0)
+
+#Calculate richness and abundance
+
+general_variables <- general_matrix_longer %>%
+  group_by(Locality) %>%
+  summarize(Richness= n(),
+         Abundance= sum(Abundance))
+
+#Calculate totals
+
+total_richness <- sum(general_variables$Richness)
+total_abundance <- sum(general_variables$Abundance)
+
+general_variables <- general_variables %>%
+  add_row(Locality= "Total", Richness= total_richness, Abundance= total_abundance)
+```
+
+# DATA SUMMARY
+
+## Cerambycidae diversity in five fragments of Tropical Dry forest
+
+### Results 
+
+We sampled a total of `r total_abundance` individuals which belong to `r total_richness` species and three subfamilies, in the five sampled locations. The abundance was distinctly higher in SFFC compared to the other localities, comprising more than half of the total abundance. The least abundant locality was LR with under 10 individuals (Fig. 1). 
+
+```{r, echo=FALSE, fig.width=5, fig.height=3, warning=FALSE, message= F}
+
+library(ggplot2)
+
+figure_1 <- ggplot(general_variables, aes(x= Locality, y= Abundance, fill= Locality))+
+  geom_col(show.legend = F)+
+  theme_classic()+
+  labs(y= "Number of individuals", caption= "Figure 1. Abundance of Cerambycidae species in fragments of TDF in\nthe Caribbean of Colombia")+
+  theme(axis.text= element_text(size= 10),
+        axis.title= element_text(size= 10),
+        legend.title= element_text(size= 10),
+        legend.text= element_text(size=10),
+    plot.caption= element_text(size=10, hjust= 0.3))+
+    scale_fill_viridis_d(option= "turbo", name= "Locality")
+  
+print(figure_1)
+
+```
+
+Regarding richness, it follows the same pattern than abundance, having the highest richness in SFFC, followed by SC, RLF, RM and lastly, LR (Fig. 2). 
+
+```{r, echo=FALSE, fig.width=5, fig.height=3, warning=FALSE, message= F}
+
+figure_2 <- ggplot(general_variables, aes(x= Locality, y= Richness, fill= Locality))+
+  geom_col(show.legend = FALSE)+
+  theme_classic()+
+  labs( y= "Number of species", caption= "Figure 2. Richness of Cerambycidae species in fragments of TDF in the\nCaribbean of Colombia")+
+  theme(axis.text= element_text(size= 10),
+        axis.title= element_text(size= 10),
+        legend.title= element_text(size= 10),
+        legend.text= element_text(size=10),
+    plot.caption= element_text(size=10, hjust= 0.3))+
+    scale_fill_viridis_d(option= "turbo", name= "Locality")
+  
+print(figure_2)
+
+```
+
+We calculated the diversity through Hill Numbers (Fig. 3). As expected, for q= 0, diversity was distinctly higher in SFFC, as it is the total richness, being almost double than the following in higher richness SC (Fig. 3a). 
+
+```{r, echo=FALSE, fig.width=5, fig.height=3, warning=FALSE, message= F}
+
+figure_3a <- ggplot(Hill_numbers, aes(x = Locality, y = Hill_0, group= Locality)) +
+  geom_point(aes(color = Locality), size= 3, show.legend = FALSE) +
+  labs(y = "Diversity q=0") +
+  theme_classic()+
+  ggtitle("a")+
+   theme(axis.text= element_text(size= 10),
+        axis.title= element_text(size= 10),
+        legend.title= element_text(size= 10),
+        legend.text= element_text(size=10),
+    plot.title= element_text(size=15, hjust= -0.1))+
+  scale_color_viridis_d(option= "turbo", name= "Locality")
+print(figure_3a)
+
+figure_3b <- ggplot(Hill_numbers, aes(x = Locality, y = Hill_1, group= Locality)) +
+  geom_point(aes(color = Locality), size= 3, show.legend = FALSE) +
+  labs(y = "Diversity q=1") +
+  theme_classic()+
+  ggtitle("b")+
+   theme(axis.text= element_text(size= 10),
+        axis.title= element_text(size= 10),
+        legend.title= element_text(size= 10),
+        legend.text= element_text(size=10),
+    plot.title= element_text(size=15, hjust= -0.1))+
+  scale_color_viridis_d(option= "turbo", name= "Locality")
+print(figure_3b)
+
+figure_3c <- ggplot(Hill_numbers, aes(x = Locality, y = Hill_2, group= Locality)) +
+  geom_point(aes(color = Locality), size= 3, show.legend = FALSE) +
+  labs(y = "Diversity q=2", caption= "Figure 3. Alpha diversity of Cerambycidae with Hill numbers in fragments\nof TDF in the Caribbean of Colombia. a) q= 0; b) q=1; c) q=2") +
+  theme_classic()+
+  ggtitle("c")+
+   theme(axis.text= element_text(size= 10),
+        axis.title= element_text(size= 10),
+        legend.title= element_text(size= 10),
+        legend.text= element_text(size=10),
+        plot.caption= element_text(size=10, hjust= 0.1),
+    plot.title= element_text(size=15, hjust= -0.1))+
+  scale_color_viridis_d(option= "turbo", name= "Locality")
+print(figure_3c)
+
+#3 different plots because when I tried to do a grid, it was very small, and like this when I knit it looks like it is one only plot with a, b and c components.
+
+```
+
+When considering common species (q= 1), the numbers even a little more, but follow the same pattern with SFFC with the highest diversity (Fig. 3b). Lastly, when considering the dominant species (q= 2), the numbers even a lot more, there is not as big differences as in q= 0, and although SFFC is still the highest, it is very close to SC (Fig. 3C).
+
+### Conclusions
+
+## Cerambycidae diversity in two habitats within TDF fragment, forest and buffer zone.
+
+### Results
+
+We sampled on both the forest fragment and the buffer zone, to compare the abundance, richness, diversity and biomass in each one (Table 1).
+
+```{r, echo=FALSE, warning=FALSE, message= F}
+
+library(knitr)
+
+kable(Variables, caption= "Table 1. Richness, abundance and biomass parameters for Cerambycidae species in two habitats (buffer zone and forest) in a fragment of TDF (SFFC). SD: Standard deviation; ABC: Abundance/Biomass Comparison; sp bm ratio: species/biomass ratio", align="c", col.names= gsub("_", " ", names(Variables)), digits = 3) 
+
+```
+
+The abundance in SFFC was the highest in our study and it is mainly represented by singletones and doubletones, with a total of `r singletones(Master_matrix)` singletones and `r doubletones(Master_matrix)` doubletones. Not surprisingly the mean abundance is `r mean` with `r above` species above the mean and `r below` species below the mean, showing the high amount of a single representative. 
+
+The Cerambycidae species that were collected in SFFC, organized by their abundance are as follow: 
+
+*`r levels(Master_matrix_ordered$Species)`*.
+
+Most of these species as mentioned above were found only once, while the community is dominated by the last two species in the list.
+
+When comparing both habitats, the buffer zone had slightly higher richness (`r max(Variables$Richness)`) and abundance (`r max(Variables$Abundance)`) than the forest (`r min(Variables$Richness)` and `r min(Variables$Abundance)` respectively) (Fig. 4 and Fig. 5). 
+
+```{r, echo=FALSE, fig.width=5, fig.height=3, warning=FALSE, message= F}
+
+figure_4 <- ggplot(Variables, aes(x= Locality, y= Abundance, fill= Locality))+
+  geom_col(show.legend = FALSE, width= 0.5)+
+  scale_x_discrete(labels= c("SFFC_buffer_zone"= "Buffer zone", "SFFC_forest" = "Forest"))+
+  theme_classic()+
+  labs(y= "Number of individuals", caption= "Figure 4. Abundance of Cerambycidae species in two habitats (forest\nand buffer zone) in a fragment of TDF (SFFC)")+
+  theme(axis.text= element_text(size= 10),
+        axis.title= element_text(size= 10),
+        legend.title= element_text(size= 10),
+        legend.text= element_text(size=10),
+    plot.caption= element_text(size=10, hjust= 0.05))+
+    scale_fill_viridis_d(option= "turbo", name= "Locality")
+  
+print(figure_4)
+
+```
+
+```{r, echo=FALSE, fig.width=5, fig.height=3, warning=FALSE, message= F}
+
+figure_5 <- ggplot(Variables, aes(x= Locality, y= Richness, fill= Locality))+
+  geom_col(show.legend = FALSE, width= 0.5)+
+  scale_x_discrete(labels= c("SFFC_buffer_zone"= "Buffer zone", "SFFC_forest" = "Forest"))+
+  theme_classic()+
+  labs(y= "Number of species", caption= "Figure 5. Richness of Cerambycidae species in two habitats (forest\nand buffer zone) in a fragment of TDF (SFFC)")+
+  theme(axis.text= element_text(size= 10),
+        axis.title= element_text(size= 10),
+        legend.title= element_text(size= 10),
+        legend.text= element_text(size=10),
+    plot.caption= element_text(size=10, hjust= 0.05))+
+    scale_fill_viridis_d(option= "turbo", name= "Locality")
+  
+print(figure_5)
+
+```
+
+We also analyzed the biomass of these species in each locality (Fig. 6).
+
+### Conclusions
+
+# REFERENCES
