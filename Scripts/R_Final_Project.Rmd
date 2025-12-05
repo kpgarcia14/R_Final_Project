@@ -18,7 +18,24 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # INTRODUCTION
 
+This report summarizes the preliminary results of the project **"Taxonomic diversity of Cerambycidae beetles in fragments of Tropical Dry Forest in the Caribbean of Colombia."**
+
+We sampled a total of five localities in the Caribbean of Colombia which are as follows: 
+
+RM: Reserva la Montaña (Atlántico);
+SC: Santa Catalina (Atlántico);
+LR: Los Rosales (Atlántico);
+SFFC: Santuario de Flora y Fauna los Colorados (Bolívar);
+RLF: Reserva La Flecha (Bolívar).
+
+Additionally, in the SFFC we compared between two different types of habitat, forest and a recovering buffer zone. 
+
+For this report, richness is calculated as number of species captured by locality, and abundance is calculated as number of individuals by locality. Diversity is estimated following Chao and collaborators' Hill numbers, which consider "effective number of species". Accordingly Hill 0 is total species richness, Hill 1 is Shannon entropy and Hill 2 is inverse Simpson (Chao *et al*., 2014).
+
 # DATA EXPLORATION
+
+For the elaboration of this report, I started with three datasets, a general matrix containing the number of individuals captured by species in each location, plot and month; a table with the biomass of each species in each habitat sampled in the SFFC; and a table with the corresponding subfamily of each species collected in the SFFC. 
+
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
 library(tidyverse)
@@ -36,6 +53,8 @@ SFFC_subfamilies <-  read.csv2("C:/Kimii/Doctorado/PhD/UGA/Classes/R/FANR_8925_F
 
 ```
 
+I subset the general matrix to the SFFC data only, for further evaluation of this data. The columns that has no data (species that were only sampled in the other localities) were filtered out.
+
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
 library(dplyr)
@@ -47,6 +66,8 @@ SFFC_matrix <- subset(general_matrix, startsWith(X, "SFFC"))#subset to SFFC rows
 SFFC_matrix <- dplyr::select(SFFC_matrix, where(~ any(!is.na(.)))) #Maintains only columns with data.
 
 ```
+
+Then I performed some data cleaning, focusing on the unification of species names across datasets because for example, in some they had spaces, underscores, dots, etc. I also identified some typos and corrected it during this step. This step was crucial for future analysis of joint datasets. 
 
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
@@ -142,6 +163,8 @@ SFFC_matrix <- SFFC_matrix %>%
   select(-Lepturges.sp1..1)
 ```
 
+I did some extra data cleaning in the SFFC dataset: First, by pivoting all the columns of species to one only species column and one abundance column. I also changed the name of some columns that were initially in spanish. Lastly, as the original matrix has information about plot and month, I summarized to consider the two habitats only. 
+
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
 #Unify Species column across all datasets.
@@ -172,6 +195,8 @@ SFFC_matrix_locality <- SFFC_matrix_longer %>%
   
 ```
 
+After all data frames had the same format, I joined all three of them resulting in one only matrix with abundance, biomass and subfamily data. In some cases, some species did not have biomass information, I filtered them out. I also needed to change biomass data to numeric for further analysis. 
+
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
 #Create master matrix with all datasets
@@ -193,6 +218,10 @@ Master_matrix$biomass <- as.numeric(Master_matrix$biomass) #change biomass to nu
 
 ```
 
+After having all my data cleaned and organized, I prepared some data for later use in the data visualization: 
+
+1) I want to provide a list of the species organized by their abundance (from less to most abundant), so I created a factor and organized it by their abundance.
+
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
 #Create factor for species name and organize by their abundance
@@ -204,6 +233,8 @@ Master_matrix_ordered <- Master_matrix %>%
          Species = fct_reorder(Species, n, max))
 
 ```
+
+2) I want to provide the number of singletones and doubletones collected in the SFFC, so I created a function that counts the species that has only one or two representatives. 
 
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
@@ -228,6 +259,8 @@ doubletones <- function(vect){
 
 ```
 
+3) I wanted to present a summarized table, that shows total richness, abundance, biomass and other parameters by locality in SFFC, so I created a new matrix with this information, and later on I did a table.
+
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
 #Create variable matrix for the table
@@ -246,6 +279,8 @@ Variables <- Variables %>%
 
  
 ```
+
+4) I wanted to count how many species had their abundance aboce and below the mean, so I calculated the mean of the abundance and then created a for loop, with an If statement to create a vector that keep those counts. e.g. For each abundance value, if it is above the mean, keep it in the vector "above", if is not, keep it in the vector "below". 
 
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
@@ -267,6 +302,8 @@ if(x > mean) {
 
 ```
 
+5) Lastly, I wanted to know how many individuals by family were collected in each locality, so I nested the matrix that contains the subfamily info into the table that was summarized by locality. Then I was able to make a histogram that shows the total abundance of each subfamily by habitat. 
+
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
 #Nested data frame by habitat of SFFC
@@ -281,6 +318,8 @@ Variables_nested <- left_join(Variables_nested, Variables, by= "Locality")
 
 
 ```
+
+Although most of the analysis performed in this report are for the SFFC locality, I decided to include some analysis to all the localities. I estimated the diversity using Hill numbers with the package hillR by Chao et al. (2014). I had to transform the general matrix so it has the format that the package requested (a row per locality), and then I created a for loop so it calculates each Hill number (0, 1 and 2) to each locality. This information was later used for a graph. 
 
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
@@ -323,6 +362,8 @@ Hill_numbers <- data.frame(
 )
 ```
 
+Lastly, for the general analysis that contains all localities, I wanted to compare their abundance and biomass, so format the matrix to be able to calculate these variables.
+
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
 #Create variable data frame for all the localities
@@ -346,6 +387,8 @@ total_abundance <- sum(general_variables$Abundance)
 general_variables <- general_variables %>%
   add_row(Locality= "Total", Richness= total_richness, Abundance= total_abundance)
 ```
+
+All the code used for data cleaning, exploration and functions can be found at the repository code.
 
 # DATA SUMMARY
 
@@ -588,4 +631,24 @@ The results of this study highlights the importance of establishing buffer zones
 
 # AI DISCLOSURE
 
+I used AI (ChatGPT) for error trouble shooting and help understanding functions. 
+
 # REFERENCES
+
+```{r, echo=FALSE, warning=FALSE, message= F, results='asis'}
+
+#Make references list and order alphabetically
+
+References <- c("GARCÍA, K., MARTÍNEZ-HERNÁNDEZ, N.J. & BOTERO, J.P. 2021. Diversity of longhorned beetles (Coleoptera: Cerambycidae) in the Caribbean region of Colombia: temporal variation between two fragments of tropical dry forest. Biota Neotropica, 21(3): e20201136.", "CAVA, M., COSCARON, M. & CORRONCA, J. 2015. Inventario y estimación de la riqueza específica de artrópodos en bosques del noreste de Argentina.Rev. Colomb. Entomol. 41:139–146.", "CHAO, A., GOTELLI, N.J., HSIEH, T.C., SANDER, E.L., MA, K.H. & ELLISON, A.M. 2014. Rarefaction and extrapolation with Hill numbers: a framework for sampling and estimation in species diversity studies. Ecol. Monogr. 84:45–67.", "PARQUES NACIONALES NATURALES DE COLOMBIA, 2024. RUNAP Registro Único Nacional de Áreas Protegidas. GOV.CO. Recuperado 26 de mayo de 2024, de https://runap.parquesnacionales.gov.co/organizacion/40", "HJÄLTÉN, J., STENBACKA, F., PETTERSSON, R.B., GIBB, H., JOHANSSON, T., DANELL, K., BALL, J.P. & HILSZCZAŃSKI, J. 2012. Micro and macro-habitat associations in saproxylic beetles: implications for biodiversity management. PLoS ONE 7: e41100.", "SMITH, T. M. y SMITH, R. L. 2007. Ecología del paisaje. p.p. 416-441. En: M. Martín-Romo (Ed.), Ecología. Addison Wesley, Madrid, España.", "ALVÁREZ-RAMÓN, Ó. I., PÉREZ-DE LA CRUZ, M., MAGAÑA-ALEJANDRO, M. A., OPORTO-PEREGRINO, S., y GERÓNIMO-TORREZ, J. C. 2022. Diversidad y fluctuación anual de cerambícidos (Coleoptera: Cerambycidae) en una selva tropical del sureste de México. Acta Biológica Colombiana, 27(1), 79-87.", "SAINT-GERMAIN, M., BUDDLE, C.M., LARRIVÉE, M., MERCADO, A., MOTCHULA, T., REICHERT, E., SACKETT, T.E., SYLVAIN, Z. & WEBB, A. Should biomass be considered more frequently as a currency in terrestrial arthropod community analyses? Journal of Applied Ecology 44 , 330–339.", "KNUFF, A. K., STAAB, M., FREY, J., DORMANN, C. F., ASBECK, T., & KLEIN, A.-M. 2020. Insect abundance in managed forests benefits from multi-layered vegetation. Basic and Applied Ecology, 48, 124–135.)")
+
+References <- as.data.frame(References)
+
+References_ordered <- References %>%
+ mutate(
+    References = as.factor(References),
+    References = factor(References, levels = sort(unique(References)))
+  )
+ 
+cat(paste0("- ", levels(References_ordered$References)), sep = "\n")
+
+```
