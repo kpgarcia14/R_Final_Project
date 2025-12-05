@@ -280,7 +280,7 @@ Variables <- Variables %>%
  
 ```
 
-4) I wanted to count how many species had their abundance aboce and below the mean, so I calculated the mean of the abundance and then created a for loop, with an If statement to create a vector that keep those counts. e.g. For each abundance value, if it is above the mean, keep it in the vector "above", if is not, keep it in the vector "below". 
+4) I wanted to count how many species had their abundance above and below the mean, so I calculated the mean of the abundance and then created a for loop, with an If statement to create a vector that keep those counts. e.g. For each abundance value, if it is above the mean, keep it in the vector "above", if is not, keep it in the vector "below". 
 
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
@@ -362,7 +362,7 @@ Hill_numbers <- data.frame(
 )
 ```
 
-Lastly, for the general analysis that contains all localities, I wanted to compare their abundance and biomass, so format the matrix to be able to calculate these variables.
+Lastly, for the general analysis that contains all localities, I wanted to compare their abundance and richness, so format the matrix to be able to calculate these variables.
 
 ```{r, echo=FALSE, warning=FALSE, message= F}
 
