@@ -1,6 +1,7 @@
 Final project for class FANR 8925: Data management and reproducible science.
 
 Author: Kimberly García. email: kpg59882@uga.edu
+Github repository link: The data associated with this report can be found in the Github repository: https://github.com/kpgarcia14/R_Final_Project.git
 
 # Description of the datasets 
 
