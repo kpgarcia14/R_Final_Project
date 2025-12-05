@@ -436,7 +436,7 @@ print(figure_2)
 
 ```
 
-We calculated the diversity through Hill Numbers (Fig. 3). As expected, for q= 0, diversity was distinctly higher in SFFC, as it is the total richness, being almost double than the following in higher richness SC (Fig. 3a). 
+I calculated the diversity through Hill Numbers (Fig. 3). As expected, for q= 0, diversity was distinctly higher in SFFC, as it is the total richness, being almost double than the following in higher richness SC (Fig. 3a). 
 
 ```{r, echo=FALSE, fig.width=5, fig.height=3, warning=FALSE, message= F}
 
@@ -554,7 +554,7 @@ print(figure_5)
 
 ```
 
-We also analyzed the biomass of these species in each locality (Fig. 6). The biomass in opposite than the abundance is greater in the forest than in the buffer zone, although is fairly close (Table 1). However, when analyzing the distribution of the biomass, the forest presents outliers, which increase the total biomass, and the buffer zone presents a more even distribution of this measure (Fig. 6). 
+I also analyzed the biomass of these species in each locality (Fig. 6). The biomass in opposite than the abundance is greater in the forest than in the buffer zone, although is fairly close (Table 1). However, when analyzing the distribution of the biomass, the forest presents outliers, which increase the total biomass, and the buffer zone presents a more even distribution of this measure (Fig. 6). 
 
 ```{r, echo=FALSE, fig.width=5, fig.height=3, warning=FALSE, message= F}
 
@@ -577,7 +577,7 @@ print(figure_6)
 
 The relation between biomass and the other variables (abundance and richness) was addressed by calculating their ratio (Table 1), and both proportions were higher in the buffer zone than in the forest habitat consistent with previous results. 
 
-Lastly, we were interested in evaluating if the abundance of the subfamilies was variable between habitats, and surprisingly, we found that in the buffer zone the most abundant subfamily is Lamiinae, while in forest it is Cerambycinae (Fig. 7). 
+Lastly, I was interested in evaluating if the abundance of the subfamilies was variable between habitats, and surprisingly, we found that in the buffer zone the most abundant subfamily is Lamiinae, while in forest it is Cerambycinae (Fig. 7). 
 
 ```{r, echo=FALSE, fig.width=5, fig.height=3, warning=FALSE, message= F}
 
@@ -615,7 +615,7 @@ print(figure_7b)
 
 ### Conclusions
 
-We made further analyses in the most diverse locality we sampled, the SFFC. The TDF in SFFC is currently under threat, so as a conservation measure, local authorities had started a recovery area with a buffer zone adjacent to the forest fragment. As Cerambycidae species are known to be conservation indicators (Hjältén *et al*. 2012), we compared the abundance, richness and biomass between forest and buffer habitats. 
+I made further analyses in the most diverse locality we sampled, the SFFC. The TDF in SFFC is currently under threat, so as a conservation measure, local authorities had started a recovery area with a buffer zone adjacent to the forest fragment. As Cerambycidae species are known to be conservation indicators (Hjältén *et al*. 2012), I compared the abundance, richness and biomass between forest and buffer habitats. 
 
 As expected, the community is characterized for a high number of rare species, this is consistent with the findings of García *et al*. (2021) which found a high number of singletones and doubletones in two fragments of TDF in the Caribbean of Colombia. Also, according to Cava *et al*. (2015) this is a common find in Neotropical Arthropods. 
 
@@ -625,7 +625,7 @@ However, the number of species and individuals alone is not enough to truly unde
 
 This higher biomass of the forest is probably related with the outliers shown in the biomass boxplot, which we conclude is a result of the high abundance of a select number of species, including *Ceragenia insulana* and *Dorcasta dasycera*. This shows that the forest still hosts the optimal resources for some species to reach their high peak of abundance, probably due to the presence of layered vegetation (Knuff *et al*., 2020). This highlights the importance to protect and recover the forest.  
 
-Lastly, given the differences in the natural history between the subfamilies of Cerambycidae, we analyzed their abundance in each habitat. We found Lamiinae to be more abundant in the buffer zone, suggesting a generalist behavior, able to adapt to all types of resources, and not depend on only the ones offered in the forest. Further studies on the habitat specialization of the species that compose Lamiinae subfamily are highly recommended to confirm this hypothesis. 
+Lastly, given the differences in the natural history between the subfamilies of Cerambycidae, I analyzed their abundance in each habitat. I found Lamiinae to be more abundant in the buffer zone, suggesting a generalist behavior, able to adapt to all types of resources, and not depend on only the ones offered in the forest. Further studies on the habitat specialization of the species that compose Lamiinae subfamily are highly recommended to confirm this hypothesis. 
 
 The results of this study highlights the importance of establishing buffer zones as a part of the recovery of a forest in restoration because it provides an optimal habitat for the species to transition to the primary forest. We expect that with this results people will see the importance of recovering our threat ecosystems and monitoring the biodiversity of groups like Cerambycidae to evaluate the ecosystem health.  
 
