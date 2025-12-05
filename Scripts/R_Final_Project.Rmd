@@ -629,6 +629,8 @@ Lastly, given the differences in the natural history between the subfamilies of 
 
 The results of this study highlights the importance of establishing buffer zones as a part of the recovery of a forest in restoration because it provides an optimal habitat for the species to transition to the primary forest. We expect that with this results people will see the importance of recovering our threat ecosystems and monitoring the biodiversity of groups like Cerambycidae to evaluate the ecosystem health.  
 
+The data associated with this report can be found in the Github repository: https://github.com/kpgarcia14/R_Final_Project.git
+
 # AI DISCLOSURE
 
 I used AI (ChatGPT) for error trouble shooting and help understanding functions. 
